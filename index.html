@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>واجب الدرس الثالث: الاستجابة للحوادث وإدارة المخاطر | منصة كودجي CodeG</title>
+    <style>
+        :root {
+            --bg-color: #0b1329;
+            --card-bg: #111d40;
+            --border-color: #1e293b;
+            --text-color: #f8fafc;
+            --subtext-color: #94a3b8;
+            --accent-color: #0284c7;
+            --accent-glow: #38bdf8;
+            --gold-color: #f59e0b;
+            --warning-color: #fdcb6e;
+            --success-color: #16a34a;
+            --danger-color: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+            min-height: 100vh;
+        }
+
+        .top-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-color), var(--gold-color));
+            transition: width 0.3s ease;
+        }
+
+        .timer-box {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: var(--card-bg);
+            border: 1px solid var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            color: var(--accent-glow);
+            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: none;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+
+        .copy-success {
+            position: fixed;
+            top: 20px;
+            right: 50%;
+            transform: translateX(50%);
+            background: var(--success-color);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: none;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .copy-success.copy-success-visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f172a, #1e3a8a);
+            border-bottom: 3px solid var(--gold-color);
+            padding: 25px 15px;
+            text-align: center;
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .logo-box {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .brand-text h1 {
+            font-size: 1.6rem;
+            color: var(--accent-glow);
+            margin-bottom: 4px;
+            font-weight: 900;
+        }
+
+        .brand-text p {
+            font-size: 1rem;
+            color: var(--subtext-color);
+            font-weight: 600;
+        }
+
+        .header-badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge-ib {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: var(--card-bg);
+            padding: 6px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-nav-btn {
+            flex: 1;
+            padding: 10px;
+            background: transparent;
+            border: none;
+            color: var(--subtext-color);
+            font-weight: bold;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-nav-btn.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            font-size: 1.3rem;
+            color: var(--accent-glow);
+            margin-bottom: 12px;
+            font-weight: 900;
+        }
+
+        .info-block {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            background: rgba(2, 132, 199, 0.08);
+            border-right: 4px solid var(--accent-color);
+        }
+
+        .info-block.warning {
+            background: rgba(245, 158, 11, 0.08);
+            border-right: 4px solid var(--gold-color);
+        }
+
+        .info-block.success {
+            background: rgba(22, 163, 74, 0.08);
+            border-right: 4px solid var(--success-color);
+        }
+
+        .btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: #0369a1;
+        }
+
+        .btn-secondary {
+            background: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #334155;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .btn-warning {
+            background: var(--gold-color);
+            color: #000;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-copy {
+            background: #8b5cf6;
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+        }
+
+        .btn-copy:hover {
+            background: #7c3aed;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .badge-accent {
+            background: rgba(2, 132, 199, 0.2);
+            color: var(--accent-glow);
+            border: 1px solid var(--accent-color);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 18px 0;
+            line-height: 1.7;
+            color: #f8fafc;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-item {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-item:hover {
+            border-color: var(--accent-color);
+        }
+
+        .option-item.correct {
+            background: rgba(22, 163, 74, 0.2);
+            border-color: var(--success-color);
+            color: #4ade80;
+        }
+
+        .option-item.wrong {
+            background: rgba(220, 38, 38, 0.2);
+            border-color: var(--danger-color);
+            color: #f87171;
+        }
+
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .feedback-msg {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .feedback-msg.correct {
+            background: rgba(22, 163, 74, 0.15);
+            color: #4ade80;
+            border: 1px solid var(--success-color);
+        }
+
+        .feedback-msg.wrong {
+            background: rgba(220, 38, 38, 0.15);
+            color: #f87171;
+            border: 1px solid var(--danger-color);
+        }
+
+        .essay-questions-list {
+            background: rgba(2, 132, 199, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .essay-questions-list h3 {
+            color: var(--accent-glow);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .essay-question-item {
+            padding: 12px 15px;
+            background: #0f172a;
+            border-right: 3px solid var(--accent-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .essay-question-item .num {
+            color: var(--accent-glow);
+            font-weight: 700;
+            margin-left: 8px;
+        }
+
+        .mode-selector-box {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn-big {
+            flex: 1;
+            min-width: 220px;
+            padding: 20px 25px;
+            border: 3px solid var(--border-color);
+            background: #0f172a;
+            color: var(--text-color);
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mode-btn-big:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .mode-btn-big.active[data-mode="electronic"] {
+            border-color: var(--accent-color);
+            background: rgba(2, 132, 199, 0.15);
+            color: var(--accent-glow);
+            box-shadow: 0 8px 25px rgba(2, 132, 199, 0.3);
+        }
+
+        .mode-btn-big.active[data-mode="paper"] {
+            border-color: var(--gold-color);
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--gold-color);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .mode-btn-big .icon-big {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .mode-btn-big .desc {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 6px;
+            font-weight: 400;
+        }
+
+        .mode-content {
+            display: none;
+        }
+
+        .mode-content.active {
+            display: block;
+        }
+
+        .essay-each-item {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .essay-each-item:focus-within {
+            border-color: var(--accent-color);
+        }
+
+        .essay-each-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .essay-each-num {
+            background: rgba(2, 132, 199, 0.2);
+            color: var(--accent-glow);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .essay-each-text {
+            font-weight: 700;
+            color: #ffd700;
+            line-height: 1.8;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .essay-each-item textarea {
+            width: 100%;
+            min-height: 100px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: var(--text-color);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            resize: vertical;
+            margin-top: 10px;
+        }
+
+        .essay-each-item textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .essay-each-item.answered {
+            border-color: var(--success-color);
+        }
+
+        .essay-each-item.answered .essay-each-num {
+            background: rgba(22, 163, 74, 0.2);
+            color: var(--success-color);
+        }
+
+        .upload-zone {
+            border: 3px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(245, 158, 11, 0.03);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--gold-color);
+            background: rgba(245, 158, 11, 0.08);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--success-color);
+            background: rgba(22, 163, 74, 0.08);
+        }
+
+        .upload-zone .icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .upload-zone h4 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .upload-zone p {
+            color: var(--subtext-color);
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .upload-zone input[type="file"] {
+            display: none;
+        }
+
+        .paper-images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 18px;
+        }
+
+        .paper-image-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .paper-image-card:hover {
+            border-color: var(--gold-color);
+        }
+
+        .paper-image-card .img-wrapper {
+            width: 100%;
+            height: 140px;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .paper-image-card img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .paper-image-card .img-info {
+            padding: 8px 10px;
+            font-size: 0.75rem;
+            color: var(--subtext-color);
+            text-align: center;
+        }
+
+        .paper-image-card .img-name {
+            color: #fff;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.8rem;
+            margin-bottom: 3px;
+        }
+
+        .paper-image-card .remove-btn {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: var(--danger-color);
+            color: #fff;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            opacity: 0.9;
+            transition: all 0.2s;
+        }
+
+        .paper-image-card .remove-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .paper-text-result {
+            margin-top: 18px;
+            padding: 15px 18px;
+            background: rgba(22, 163, 74, 0.06);
+            border-right: 4px solid var(--success-color);
+            border-radius: 10px;
+        }
+
+        .paper-text-result strong {
+            color: var(--success-color);
+            display: block;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+
+        .paper-text-result textarea {
+            width: 100%;
+            min-height: 160px;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            color: var(--text-color);
+            font-size: 1rem;
+            line-height: 1.9;
+            resize: vertical;
+        }
+
+        .report-details {
+            max-height: 350px;
+            overflow-y: auto;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .q-item {
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .q-num {
+            font-weight: bold;
+            color: var(--accent-glow);
+        }
+
+        .correct-ans { color: #4ade80; font-weight: bold; }
+        .wrong-ans { color: #f87171; font-weight: bold; }
+        .user-ans { color: #cbd5e1; }
+
+        .certificate-box {
+            background: linear-gradient(135deg, #1e1b4b, #0f172a);
+            border: 2px solid var(--gold-color);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .certificate-box h2 {
+            color: var(--gold-color);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .student-name {
+            font-size: 1.4rem;
+            color: var(--accent-glow);
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .cert-score {
+            font-size: 1.2rem;
+            color: #4ade80;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .whatsapp-hint {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-top: 8px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 10px; }
+            .brand-text h1 { font-size: 1.3rem; }
+            .card { padding: 15px; }
+            .timer-box { top: 50px; left: 10px; font-size: 0.8rem; }
+            .nav-controls .btn { padding: 8px 12px; font-size: 0.85rem; }
+            .mode-btn-big { min-width: 100%; padding: 15px; }
+            .paper-images-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+<div class="timer-box" id="timer-box">⏱️ <span id="timer-display">90:00</span></div>
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="copy-success" id="copy-success">✅ تم نسخ التقرير إلى الحافظة!</div>
+
+<header>
+    <div class="header-content">
+        <div class="logo-section">
+            <div class="logo-box">🧠</div>
+            <div class="brand-text">
+                <h1>منصة كودجي - مهندس: اندرو مجدي</h1>
+                <p>واجب الدرس الثالث: الاستجابة للحوادث وإدارة المخاطر (الوحدة الثانية: الأمن السيبراني)</p>
+            </div>
+            <div class="logo-box">👨‍🏫</div>
+        </div>
+        <div class="header-badges">
+            <span class="badge-ib">🛡️ الوحدة الثانية</span>
+            <span class="badge-ib">🚨 الدرس الثالث</span>
+            <span class="badge-ib">🇪🇬 مصر</span>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="tab-nav" id="main-tabs">
+        <button class="tab-nav-btn" data-tab="instructions" onclick="switchMainTab('instructions')">📖 تعليمات</button>
+        <button class="tab-nav-btn active" data-tab="mcq" onclick="switchMainTab('mcq')">📝 الاختياري</button>
+        <button class="tab-nav-btn" data-tab="essay" onclick="switchMainTab('essay')">✍️ المقالي</button>
+        <button class="tab-nav-btn" data-tab="result" onclick="switchMainTab('result')">🏆 النتيجة</button>
+    </div>
+
+    <!-- تبويب التعليمات -->
+    <div class="tab-content" id="tab-instructions">
+        <section class="card">
+            <h2>📖 تعليمات الواجب المنزلي</h2>
+            <div class="info-block warning">
+                <p style="font-size:1.05rem;line-height:2;">
+                    <strong>📌 مكونات الواجب:</strong><br>
+                    • <strong>20 سؤال اختياري</strong> — حل إلكتروني تفاعلي متزامن (مستخرج بالكامل من كتاب التقييمات والأداءات الرسمية والكتاب المدرسي).<br>
+                    • <strong>10 أسئلة مقالية وتحليلية</strong> (تغطي مراحل الاستجابة ومصفوفة المخاطر) — تختار طريقة الحل:<br>
+                    &nbsp;&nbsp;&nbsp;💻 <strong>حل إلكتروني:</strong> لكل سؤال مربع إجابة خاص به يُحفظ تلقائياً.<br>
+                    &nbsp;&nbsp;&nbsp;📷 <strong>حل ورقي:</strong> تصوّر ورقتك (<strong>حتى 3 صور</strong>)، وترفعها للمنصة مباشرة.<br><br>
+
+                    <strong>📝 تعليمات الاختياري:</strong><br>
+                    1. اختر الإجابة الصحيحة لكل سؤال ثم اضغط "تحقق" لمعرفة التعليل الفوري.<br>
+                    2. بعد الانتهاء من الأسئلة العشرين، اضغط "إنهاء الاختياري والانتقال للمقالي".<br><br>
+
+                    <strong>✍️ تعليمات المقالي:</strong><br>
+                    1. الأسئلة مصممة لتقييم فهم خطوات الاستجابة الست، الفارق بين الاحتواء والاستئصال، ومعادلة تقدير الخطر.<br>
+                    2. يمكنك قراءة جميع الأسئلة معاً في القائمة المجمعة بالأعلى قبل البدء.<br><br>
+
+                    <strong>🏆 التقرير النهائي:</strong><br>
+                    يجمع إجاباتك كاملة في تقرير منظم بضغطة زر واحدة لإرساله لمهندس أندرو عبر الواتساب.
+                </p>
+            </div>
+            <button class="btn" style="width:100%;padding:14px;margin-top:10px;" onclick="switchMainTab('mcq')">🚀 ابدأ الواجب الآن</button>
+        </section>
+    </div>
+
+    <!-- تبويب الاختياري -->
+    <div class="tab-content active" id="tab-mcq">
+        <section class="card" id="mcq-setup">
+            <h2>📝 الجزء الأول: 20 سؤال اختياري (الاستجابة للحوادث وإدارة المخاطر)</h2>
+            <p style="color:var(--subtext-color);">حل إلكتروني تفاعلي — أسئلة الكتاب المدرسي وكتاب التقييمات والأداءات الرسمية</p>
+            <div style="margin:15px 0;">
+                <label style="display:block;margin-bottom:6px;font-weight:700;">👤 اسمك الثلاثي:</label>
+                <input type="text" id="student-name-input" placeholder="اكتب اسمك هنا..." style="width:100%;padding:12px;background:var(--bg-color);border:1px solid var(--border-color);border-radius:8px;color:#fff;font-size:1rem;">
+            </div>
+            <button class="btn" style="width:100%;padding:14px;" onclick="startMcq()">🚀 ابدأ الاختياري</button>
+        </section>
+
+        <section class="card" id="mcq-container" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                <h2 id="mcq-title" style="color:#fffffe;">السؤال 1</h2>
+                <span class="badge badge-accent" id="mcq-progress">1 من 20</span>
+            </div>
+            <div id="mcq-area"></div>
+            <div id="mcq-feedback"></div>
+            <div class="nav-controls">
+                <button class="btn btn-secondary" id="prev-mcq" onclick="navigateMcq(-1)">السابق</button>
+                <button class="btn" style="background:var(--accent-color);" onclick="checkMcq()">🔍 تحقق</button>
+                <button class="btn btn-secondary" id="next-mcq" onclick="navigateMcq(1)">التالي</button>
+            </div>
+            <button class="btn btn-success" style="width:100%;margin-top:20px;padding:14px;" onclick="finishMcq()">✔ إنهاء الاختياري والانتقال للمقالي</button>
+        </section>
+    </div>
+
+    <!-- تبويب المقالي -->
+    <div class="tab-content" id="tab-essay">
+        <section class="card" id="essay-container" style="display:none;">
+            <h2>✍️ الجزء الثاني: 10 أسئلة مقالية (إدارة المخاطر والاستجابة للحوادث)</h2>
+
+            <div class="essay-questions-list">
+                <h3>📋 الأسئلة (اقرأها كلها قبل الحل):</h3>
+                <div id="essay-questions-display"></div>
+            </div>
+
+            <div class="info-block">
+                <strong style="color:#fff;">🎯 اختر طريقة الحل (لكل الأسئلة معاً):</strong>
+            </div>
+
+            <div class="mode-selector-box">
+                <button class="mode-btn-big active" data-mode="electronic" onclick="selectEssayMode('electronic')">
+                    <span class="icon-big">💻</span>
+                    حل إلكتروني
+                    <div class="desc">لكل سؤال مربع خاص به</div>
+                </button>
+                <button class="mode-btn-big" data-mode="paper" onclick="selectEssayMode('paper')">
+                    <span class="icon-big">📷</span>
+                    حل ورقي
+                    <div class="desc">صوّر ورقتك (حتى 3 صور) وارفعها</div>
+                </button>
+            </div>
+
+            <!-- محتوى الحل الإلكتروني -->
+            <div class="mode-content active" id="mode-electronic">
+                <div class="info-block success">
+                    💡 اكتب إجابة كل سؤال في المربع المخصص له
+                </div>
+                <div id="essay-electronic-items"></div>
+            </div>
+
+            <!-- محتوى الحل الورقي -->
+            <div class="mode-content" id="mode-paper">
+                <div class="upload-zone" id="upload-zone" onclick="document.getElementById('paper-file-input').click()">
+                    <span class="icon">📤</span>
+                    <h4>اضغط لرفع صور إجابتك الورقية (حتى 3 صور)</h4>
+                    <p>حل كل الأسئلة في ورقة، صوّرها، وارفعها</p>
+                    <p style="font-size:0.75rem;color:var(--subtext-color);">PNG · JPG · JPEG — بحد أقصى 10 ميجابايت للصورة</p>
+                    <input type="file" id="paper-file-input" accept="image/*" multiple onchange="handlePaperFiles(event)">
+                </div>
+
+                <div class="paper-images-grid" id="paper-images-grid"></div>
+
+                <div class="paper-text-result" id="paper-text-result" style="display:block;margin-top:15px;">
+                    <strong>📝 ملاحظات أو ملخص إجابتك الورقية (اختياري):</strong>
+                    <textarea id="paper-extracted-text" placeholder="يمكنك كتابة ملخص أو أرقام الصفحات المصورة هنا..." oninput="savePaperExtractedText(this.value)"></textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-success" style="width:100%;margin-top:25px;padding:14px;font-size:1.05rem;" onclick="finishEssay()">✔ إنهاء الواجب وعرض النتيجة</button>
+        </section>
+    </div>
+
+    <!-- تبويب النتيجة -->
+    <div class="tab-content" id="tab-result">
+        <section class="card" id="result-container" style="display:none;">
+            <h2>🎉 نتيجة الواجب</h2>
+            <p id="score-summary" style="color:var(--subtext-color);font-size:1.1rem;line-height:2;"></p>
+            <div id="report-details-container" class="report-details"></div>
+            <div class="certificate-box" id="certificate">
+                <h2>📜 شهادة إتمام</h2>
+                <p>تشهد أكاديمية كودجي بأن الطالب/الطالبة:</p>
+                <div class="student-name" id="cert-name">—</div>
+                <p>قد أتم بنجاح واجب <b>الدرس الثالث: الاستجابة للحوادث وإدارة المخاطر (الوحدة الثانية: الأمن السيبراني)</b></p>
+                <p class="cert-score" id="cert-score">🌟 النتيجة: 0%</p>
+                <div style="margin-top:25px;font-size:0.85rem;color:var(--subtext-color);">📅 تم التقييم آلياً بواسطة منصة كودجي 🤖</div>
+            </div>
+
+            <div style="margin-top:25px;">
+                <button class="btn btn-copy" onclick="copyReportToClipboard()">
+                    📋 انسخ التقرير وارسله عبر الواتساب لمهندس أندرو 01555772562
+                </button>
+                <div class="whatsapp-hint">
+                    <span>💡</span>
+                    بعد الضغط على الزر، اذهب إلى واتساب وألصق التقرير (Paste) وأرسله للمهندس أندرو
+                </div>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:20px;">
+                <button class="btn btn-secondary" onclick="location.reload()">🔄 إعادة الواجب</button>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    var mcqQuestions = [
+        {
+            q: "حدث يؤثر في سرية المعلومات أو سلامتها أو توافرها أو يخالف سياسة أمنية معتمدة يُسمى:",
+            opts: ["حادثاً أمنياً (Security Incident)", "تقييماً للمخاطر", "احتواءً للتهديد", "درساً مستفاداً"],
+            ans: 0
+        },
+        {
+            q: "أي من الخيارات التالية يُعد مثالاً نموذجياً على حادث أمني يؤثر بشكل مباشر في توافر الخدمة (Availability)؟",
+            opts: ["تسرب المعلومات الشخصية أو السرية إلى الخارج", "تعديل البيانات داخل نظام ما دون تصريح", "انقطاع الخدمة بسبب هجمات إلكترونية على الخادم", "إنشاء إجراءات وهياكل استجابة مسبقاً"],
+            ans: 2
+        },
+        {
+            q: "تعديل البيانات داخل نظام ما دون تصريح يُعد مثالاً نموذجياً على:",
+            opts: ["انقطاع الخدمة", "تسرب المعلومات", "التلاعب بالبيانات (Data Tampering)", "التحضير المسبق"],
+            ans: 2
+        },
+        {
+            q: "تسرب المعلومات الشخصية أو السرية الخاصة بالعملاء إلى الخارج يُمثل حادثاً أمنياً من نوع:",
+            opts: ["تسرب المعلومات (Information Leak)", "انقطاع الخدمة", "التلاعب بالبيانات", "الاستعادة الآمنة"],
+            ans: 0
+        },
+        {
+            q: "أي من الخيارات التالية لا يمثل مثالاً لحادث أمني؟",
+            opts: ["تشفير البيانات بسبب الإصابة ببرنامج فدية", "تسرب معلومات العملاء عبر وصول غير مصرح به", "إجراء تحديث للبرنامج لإضافة ميزات جديدة", "توقف خدمة ويب عن العمل بسبب هجوم على الخادم"],
+            ans: 2
+        },
+        {
+            q: "ما هي المرحلة الأولى من نموذج الاستجابة للحوادث الست التي تهدف إلى إنشاء إجراءات وهياكل استجابة مسبقاً استعداداً للطوارئ؟",
+            opts: ["الاكتشاف", "التحضير (Preparation)", "الاحتواء", "الاستعادة"],
+            ans: 1
+        },
+        {
+            q: "المرحلة التي تتضمن اكتشاف وتأكيد وقوع حادث أمني في النظام بعد التحضير المسبق هي:",
+            opts: ["الاستعادة", "الاكتشاف (Detection)", "الدروس المستفادة", "الاستئصال"],
+            ans: 1
+        },
+        {
+            q: "ما هو المصطلح الذي يُطلق على إجراء عزل الجزء المتأثر أو تقييد أثره بالطريقة المناسبة لمنع انتشار المشكلة لبقية الشبكة؟",
+            opts: ["التحضير", "الاكتشاف", "الاحتواء (Containment)", "الاستعادة"],
+            ans: 2
+        },
+        {
+            q: "فصل حاسوب مصاب بالبرمجيات الخبيثة عن الشبكة لمنع انتشار الضرر يُعد تطبيقاً مباشراً لمرحلة:",
+            opts: ["التحضير", "الاحتواء", "الاستئصال", "الاستعادة"],
+            ans: 1
+        },
+        {
+            q: "ماذا تعني مرحلة «الاستئصال / إزالة التهديد (Eradication)» في نموذج الاستجابة للحوادث؟",
+            opts: ["إنشاء إجراءات استجابة مسبقاً", "إزالة التهديد ومسبباته الجذرية مثل حذف البرمجيات الخبيثة وسد الثغرات", "استعادة الأنظمة من نسخة احتياطية", "توثيق الملاحظات والدروس المستفادة"],
+            ans: 1
+        },
+        {
+            q: "المرحلة التي تُعنى بإعادة الأنظمة والخدمات إلى حالة تشغيل آمنة وطبيعية وتشمل الاستعادة من نسخة احتياطية سليمة هي:",
+            opts: ["الاستعادة (Recovery)", "الاحتواء", "الاكتشاف", "التحضير"],
+            ans: 0
+        },
+        {
+            q: "أي مرحلة تختتم بها المراحل الست وتتضمن تحليل ما حدث وتوثيق الدروس لتحسين الضوابط وتقليل احتمال تكرار الحادث؟",
+            opts: ["الاكتشاف", "إزالة التهديد", "الاستعادة", "الدروس المستفادة والتحسين (Prevention of Recurrence)"],
+            ans: 3
+        },
+        {
+            q: "ما هو الترتيب الصحيح للتسلسل العام لنموذج مراحل الاستجابة للحوادث الست؟",
+            opts: [
+                "الاكتشاف ← الاستئصال ← الاحتواء ← الاستعادة ← التحضير ← الدروس المستفادة",
+                "التحضير ← الاكتشاف ← الاحتواء ← إزالة التهديد (الاستئصال) ← الاستعادة ← الدروس المستفادة والتحسين",
+                "الاحتواء ← التحضير ← الاكتشاف ← الاستئصال ← الدروس المستفادة ← الاستعادة",
+                "التحضير ← الاحتواء ← الاكتشاف ← الاستعادة ← الاستئصال ← الدروس المستفادة"
+            ],
+            ans: 1
+        },
+        {
+            q: "لماذا يجب تنفيذ مرحلة «الاحتواء» قبل مرحلة «الاستئصال (إزالة التهديد)»؟",
+            opts: [
+                "لأن الاحتواء يعزل الضرر ويمنع امتداد الهجوم للشبكة أثناء محاولة إزالة التهديد",
+                "لأن الاستئصال يتم تلقائياً بدون تدخل فني",
+                "لأن الاحتواء يحذف البرمجيات الخبيثة نهائياً",
+                "لأن الاستعادة تسبق مرحلة الاحتواء دائماً"
+            ],
+            ans: 0
+        },
+        {
+            q: "كيف يتم حساب «درجة الخطر» في نموذج تقييم المخاطر المبسط للدرس؟",
+            opts: ["التأثير + الاحتمالية", "التأثير ÷ الاحتمالية", "التأثير × الاحتمالية", "التأثير - الاحتمالية"],
+            ans: 2
+        },
+        {
+            q: "ما المقصود بمصطلح «التأثير (Impact)» في سياق تقييم المخاطر؟",
+            opts: ["مدى احتمال وقوع الحدث", "مقدار وحجم الضرر المتوقع إذا وقعت المخاطرة", "سرعة استجابة فريق الطوارئ", "عدد مرات تكرار الحادث سنوياً"],
+            ans: 1
+        },
+        {
+            q: "ماذا يُقصد بمصطلح «الاحتمالية (Likelihood)» في تقييم المخاطر؟",
+            opts: ["حجم الخسائر المادية المترتبة", "مدى إمكانية أو احتمال وقوع الحدث أو المخاطرة", "سرعة تنفيذ مراحل الاستجابة", "عدد الأجهزة المتأثرة بالهجوم"],
+            ans: 1
+        },
+        {
+            q: "وفقاً لمصفوفة تقييم المخاطر، ما هي الفئة التي تُعد من أعلى الأولويات ويجب معالجتها أولاً وبشكل حاسم؟",
+            opts: ["التأثير المنخفض والاحتمالية المنخفضة", "التأثير المتوسط والاحتمالية المتوسطة", "التأثير المرتفع والاحتمالية المرتفعة (Critical)", "التأثير المنخفض والاحتمالية المرتفعة"],
+            ans: 2
+        },
+        {
+            q: "المخاطر ذات التأثير المرتفع والاحتمالية المنخفضة في مصفوفة تقييم المخاطر تصنف عادة على أنها ذات خطورة:",
+            opts: ["مرتفعة جداً", "متوسطة (Medium)", "معدومة", "منخفضة جداً"],
+            ans: 1
+        },
+        {
+            q: "إذا كشفت مرحلة «الاستعادة» عن وجود بقايا للبرمجية الخبيثة، فإن الإجراء الصحيح الذي يفرضه النموذج الواقعي للاستجابة هو:",
+            opts: [
+                "مواصلة تشغيل النظام وتجاهل البقايا",
+                "العودة فوراً إلى مرحلة الاحتواء أو إزالة التهديد للقضاء عليها",
+                "مسح النسخ الاحتياطية السليمة",
+                "إنهاء خطة الاستجابة فوراً"
+            ],
+            ans: 1
+        }
+    ];
+
+    var essayQuestions = [
+        { q: "ما المقصود بمصطلح «الحادث الأمني»، واذكر ثلاثة من أبرز أمثلته النموذجية مع بيان وصف وأثر كل منها؟" },
+        { q: "اذكر المراحل الست للاستجابة للحوادث بترتيبها التسلسلي الصحيح، مع بيان الغرض الأساسي لكل من مرحلتي «التحضير» و«الاكتشاف»." },
+        { q: "وضح بالتفصيل الغرض من مرحلتي «الاحتواء» و«إزالة التهديد (الاستئصال)»، وميّز بين دور كل منهما في خطة الاستجابة." },
+        { q: "اشرح بالتفصيل كيف يتم تنفيذ مرحلتي «الاستعادة» و«الدروس المستفادة والتحسين» عند التعامل مع حادث أمني خطير مثل هجوم برمجية فدية." },
+        { q: "لماذا يجب تنفيذ مرحلة «الاحتواء» قبل مرحلة «الاستئصال (إزالة التهديد)»؟ وما الخطر المترتب على بدء الاستعادة قبل القضاء على مسبب الحادث؟" },
+        { q: "ناقش العبارة التالية: «يساعد ترتيب المراحل على فهم التسلسل العام، لكن الاستجابة الفعلية قد تتضمن تداخلاً أو تكراراً بين الأنشطة»، مع ذكر مثال عملي يوضح ذلك." },
+        { q: "كيف يتم تقدير «درجة الخطر» في نموذج الدرس المبسط؟ اذكر معادلته الرياضية، وعرّف كلاً من العاملين الأساسيين المكونين له (التأثير والاحتمالية)." },
+        { q: "اشرح كيف تستخدم المؤسسات «مصفوفة تقييم المخاطر» لتصنيف المخاطر وتوجيه الجهود المحدودة نحو المعالجة ذات الأولوية القصوى." },
+        { q: "قارن بين كيفية تعامل مسؤولي الأمن مع خطر ذي (تأثير مرتفع واحتمالية مرتفعة) مقابل خطر ذي (تأثير مرتفع واحتمالية منخفضة) استناداً لمصفوفة المخاطر." },
+        { q: "سيناريو تطبيقي: متجر إلكتروني اكتشف للتو تسرب بيانات العملاء؛ حدد المرحلتين التاليتين مباشرة الواجب تنفيذهما بالترتيب مع التعليل، واقترح خطراً واحداً يجب منحه الأولوية القصوى مستقبلاً." }
+    ];
+
+    var studentName = '';
+    var currentMcqIndex = 0;
+    var mcqAnswers = new Array(mcqQuestions.length).fill(null);
+    var essayMode = 'electronic';
+    var essayElectronicAnswers = new Array(essayQuestions.length).fill('');
+    var essayPaperText = '';
+    var paperImages = [];
+    var mcqTimer = null;
+    var timeLeft = 5400;
+
+    function switchMainTab(tab) {
+        document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+        var target = document.getElementById('tab-' + tab);
+        if (target) target.classList.add('active');
+        document.querySelectorAll('.tab-nav-btn').forEach(function(el) { el.classList.remove('active'); });
+        var btn = document.querySelector('.tab-nav-btn[data-tab="' + tab + '"]');
+        if (btn) btn.classList.add('active');
+    }
+
+    function updateProgress() {
+        var total = mcqQuestions.length + essayQuestions.length;
+        var done = 0;
+        mcqQuestions.forEach(function(q, idx) { if (mcqAnswers[idx] !== null) done++; });
+        if (essayMode === 'electronic') {
+            essayElectronicAnswers.forEach(function(a) { if ((a || '').trim().length >= 5) done++; });
+        } else {
+            if (essayPaperText.trim().length >= 20 || paperImages.length > 0) done += essayQuestions.length;
+        }
+        var pct = Math.min(100, (done / total) * 100);
+        var fill = document.getElementById('progress-fill');
+        if (fill) fill.style.width = pct + '%';
+    }
+
+    function startMcq() {
+        var nameInput = document.getElementById('student-name-input');
+        if (!nameInput.value.trim()) {
+            alert('⚠️ برجاء إدخال اسمك الثلاثي');
+            return;
+        }
+        studentName = nameInput.value.trim();
+        document.getElementById('mcq-setup').style.display = 'none';
+        document.getElementById('mcq-container').style.display = 'block';
+        document.getElementById('timer-box').style.display = 'block';
+
+        if (mcqTimer) clearInterval(mcqTimer);
+        timeLeft = 5400;
+        mcqTimer = setInterval(function() {
+            timeLeft--;
+            var mins = Math.floor(timeLeft / 60);
+            var secs = timeLeft % 60;
+            document.getElementById('timer-display').textContent =
+                (mins < 10 ? '0' + mins : mins) + ':' + (secs < 10 ? '0' + secs : secs);
+            if (timeLeft <= 0) {
+                clearInterval(mcqTimer);
+                alert('⏰ انتهى الوقت! سيتم الانتقال للمقالي.');
+                finishMcq();
+            }
+        }, 1000);
+
+        loadMcqQuestion(0);
+    }
+
+    function loadMcqQuestion(index) {
+        var q = mcqQuestions[index];
+        if (!q) return;
+        document.getElementById('mcq-title').textContent = 'السؤال ' + (index + 1) + ' من ' + mcqQuestions.length;
+        document.getElementById('mcq-progress').textContent = (index + 1) + ' من ' + mcqQuestions.length;
+
+        var area = document.getElementById('mcq-area');
+        var html = '<div class="question-text">' + q.q + '</div><ul class="options-list">';
+        q.opts.forEach(function(opt, oi) {
+            var checked = mcqAnswers[index] === oi ? 'checked' : '';
+            html += '<li class="option-item" onclick="selectMcqOption(' + index + ', ' + oi + ')" id="mcq-opt-' + index + '-' + oi + '">';
+            html += '<input type="radio" name="mcq-' + index + '" id="mcq-radio-' + index + '-' + oi + '" value="' + oi + '" ' + checked + ' style="accent-color:var(--accent-color);">';
+            html += '<label for="mcq-radio-' + index + '-' + oi + '" style="cursor:pointer;width:100%;display:block;">' + opt + '</label>';
+            html += '</li>';
+        });
+        html += '</ul>';
+        area.innerHTML = html;
+        document.getElementById('mcq-feedback').innerHTML = '';
+        document.getElementById('prev-mcq').disabled = (index === 0);
+        document.getElementById('next-mcq').disabled = (index === mcqQuestions.length - 1);
+        updateProgress();
+    }
+
+    function selectMcqOption(qIndex, optIdx) {
+        mcqAnswers[qIndex] = optIdx;
+        document.querySelectorAll('#mcq-area .option-item').forEach(function(item) {
+            item.classList.remove('correct', 'wrong');
+        });
+        document.getElementById('mcq-feedback').innerHTML = '';
+        updateProgress();
+    }
+
+    function checkMcq() {
+        var q = mcqQuestions[currentMcqIndex];
+        var selected = mcqAnswers[currentMcqIndex];
+        var fb = document.getElementById('mcq-feedback');
+        if (selected === null || selected === undefined) {
+            fb.innerHTML = '<div class="feedback-msg wrong">⚠️ لم تختر إجابة بعد.</div>';
+            return;
+        }
+        var correct = q.ans === selected;
+        document.querySelectorAll('#mcq-area .option-item').forEach(function(item, idx) {
+            item.classList.remove('correct', 'wrong');
+            if (idx === q.ans) item.classList.add('correct');
+            else if (idx === selected && !correct) item.classList.add('wrong');
+        });
+        if (correct) {
+            fb.innerHTML = '<div class="feedback-msg correct">🎉 إجابة صحيحة! أحسنت.</div>';
+        } else {
+            fb.innerHTML = '<div class="feedback-msg wrong">❌ إجابة خاطئة. الإجابة الصحيحة هي: ' + q.opts[q.ans] + '</div>';
+        }
+    }
+
+    function navigateMcq(delta) {
+        var newIdx = currentMcqIndex + delta;
+        if (newIdx >= 0 && newIdx < mcqQuestions.length) {
+            currentMcqIndex = newIdx;
+            loadMcqQuestion(currentMcqIndex);
+        }
+    }
+
+    function finishMcq() {
+        clearInterval(mcqTimer);
+        document.getElementById('timer-box').style.display = 'none';
+        document.getElementById('essay-container').style.display = 'block';
+        renderEssayQuestions();
+        renderElectronicItems();
+        switchMainTab('essay');
+    }
+
+    function renderEssayQuestions() {
+        var display = document.getElementById('essay-questions-display');
+        var html = '';
+        essayQuestions.forEach(function(q, idx) {
+            html += '<div class="essay-question-item"><span class="num">س' + (idx + 1) + ':</span>' + q.q + '</div>';
+        });
+        display.innerHTML = html;
+        updateProgress();
+    }
+
+    function renderElectronicItems() {
+        var container = document.getElementById('essay-electronic-items');
+        var html = '';
+        essayQuestions.forEach(function(q, idx) {
+            var answer = essayElectronicAnswers[idx] || '';
+            var isAnswered = answer.trim().length >= 5;
+            html += '<div class="essay-each-item ' + (isAnswered ? 'answered' : '') + '" id="essay-item-' + idx + '">';
+            html += '<div class="essay-each-header">';
+            html += '<span class="essay-each-num">س' + (idx + 1) + '</span>';
+            html += '<span class="essay-each-text">' + q.q + '</span>';
+            html += '</div>';
+            html += '<textarea id="essay-answer-' + idx + '" placeholder="اكتب إجابتك النموذجية للسؤال ' + (idx + 1) + ' هنا..." oninput="updateElectronicAnswer(' + idx + ', this.value)">' + answer + '</textarea>';
+            html += '</div>';
+        });
+        container.innerHTML = html;
+    }
+
+    function updateElectronicAnswer(idx, value) {
+        essayElectronicAnswers[idx] = value;
+        var item = document.getElementById('essay-item-' + idx);
+        if (item) {
+            if ((value || '').trim().length >= 5) item.classList.add('answered');
+            else item.classList.remove('answered');
+        }
+        updateProgress();
+    }
+
+    function selectEssayMode(mode) {
+        essayMode = mode;
+        document.querySelectorAll('.mode-btn-big').forEach(function(btn) {
+            if (btn.dataset.mode === mode) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+        if (mode === 'electronic') {
+            document.getElementById('mode-electronic').classList.add('active');
+            document.getElementById('mode-paper').classList.remove('active');
+        } else {
+            document.getElementById('mode-electronic').classList.remove('active');
+            document.getElementById('mode-paper').classList.add('active');
+        }
+        updateProgress();
+    }
+
+    function savePaperExtractedText(value) {
+        essayPaperText = value;
+        updateProgress();
+    }
+
+    function handlePaperFiles(event) {
+        var files = Array.from(event.target.files);
+        if (!files.length) return;
+
+        var added = 0;
+        files.forEach(function(file) {
+            if (!file.type.startsWith('image/')) return;
+            if (file['size'] > 10 * 1024 * 1024) return;
+            if (paperImages.length >= 3) return;
+
+            var id = 'img_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            var imgObj = { id: id, file: file, base64: null };
+            paperImages.push(imgObj);
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                imgObj.base64 = e.target.result;
+                renderPaperImages();
+            };
+            reader.readAsDataURL(file);
+            added++;
+        });
+
+        if (paperImages.length >= 3 && added === 0) {
+            alert('⚠️ الحد الأقصى 3 صور فقط');
+        }
+        event.target.value = '';
+    }
+
+    function renderPaperImages() {
+        var grid = document.getElementById('paper-images-grid');
+        var html = '';
+        paperImages.forEach(function(img) {
+            html += '<div class="paper-image-card">';
+            html += '<button class="remove-btn" onclick="removePaperImage(\'' + img.id + '\', event)" title="حذف">×</button>';
+            html += '<div class="img-wrapper">';
+            if (img.base64) {
+                html += '<img src="' + img.base64 + '" alt="' + img.file['name'] + '">';
+            } else {
+                html += '<div style="color:#4a4a6a;font-size:2rem;">🖼️</div>';
+            }
+            html += '</div>';
+            html += '<div class="img-info">';
+            html += '<div class="img-name" title="' + img.file['name'] + '">' + img.file['name'] + '</div>';
+            html += '<div>' + (img.file['size'] / 1024).toFixed(1) + ' KB</div>';
+            html += '</div></div>';
+        });
+        grid.innerHTML = html;
+        updateProgress();
+    }
+
+    function removePaperImage(id, event) {
+        if (event) event.stopPropagation();
+        paperImages = paperImages.filter(function(img) { return img.id !== id; });
+        renderPaperImages();
+    }
+
+    var uploadZone = document.getElementById('upload-zone');
+    if (uploadZone) {
+        ['dragenter', 'dragover'].forEach(function(evt) {
+            uploadZone.addEventListener(evt, function(e) { e.preventDefault(); e.stopPropagation(); uploadZone.classList.add('dragover'); });
+        });
+        ['dragleave', 'drop'].forEach(function(evt) {
+            uploadZone.addEventListener(evt, function(e) { e.preventDefault(); e.stopPropagation(); uploadZone.classList.remove('dragover'); });
+        });
+        uploadZone.addEventListener('drop', function(e) {
+            var files = Array.from(e.dataTransfer.files);
+            if (files.length) handlePaperFiles({ target: { files: files } });
+        });
+    }
+
+    function finishEssay() {
+        showResult();
+        switchMainTab('result');
+    }
+
+    function showResult() {
+        var mcqCorrect = 0;
+        var mcqAnswered = 0;
+        mcqQuestions.forEach(function(q, idx) {
+            if (mcqAnswers[idx] !== null) mcqAnswered++;
+            if (mcqAnswers[idx] === q.ans) mcqCorrect++;
+        });
+
+        var essayAnswered = 0;
+        var essayText = '';
+        if (essayMode === 'electronic') {
+            essayElectronicAnswers.forEach(function(a) { if ((a || '').trim().length >= 5) essayAnswered++; });
+            essayText = essayElectronicAnswers.map(function(a, i) { return 'س' + (i + 1) + ': ' + (a || 'لم يجب'); }).join('\n\n');
+        } else {
+            if (essayPaperText.trim().length >= 20 || paperImages.length > 0) essayAnswered = essayQuestions.length;
+            essayText = essayPaperText.trim() ? essayPaperText : ('تم إرفاق ' + paperImages.length + ' صور للإجابة الورقية');
+        }
+
+        var mcqPercent = Math.round((mcqCorrect / mcqQuestions.length) * 100);
+        var essayPercent = Math.round((essayAnswered / essayQuestions.length) * 100);
+        var overall = Math.round((mcqPercent + essayPercent) / 2);
+
+        document.getElementById('score-summary').innerHTML =
+            '📊 <b style="color:#fff;">النتيجة النهائية:</b> ' + overall + '%<br>' +
+            '📝 الاختياري: ' + mcqCorrect + '/' + mcqQuestions.length + ' (' + mcqPercent + '%)<br>' +
+            '✍️ المقالي: ' + essayAnswered + '/' + essayQuestions.length + ' (' + essayPercent + '%)<br>' +
+            '<span style="font-size:0.9rem;opacity:0.8;">تم الإجابة على ' + mcqAnswered + ' من ' + mcqQuestions.length + ' سؤال اختياري</span>';
+
+        var reportHTML = '<h3 style="color:#fff;">📋 التقرير الشامل</h3>';
+        reportHTML += '<h4 style="color:var(--accent-glow);margin:15px 0 10px 0;">📝 أسئلة الاختيار من متعدد (' + mcqQuestions.length + ' سؤال)</h4>';
+        mcqQuestions.forEach(function(q, idx) {
+            var num = idx + 1;
+            var userAns = mcqAnswers[idx];
+            var isCorrect = userAns === q.ans;
+            var correctText = q.opts[q.ans];
+            var userText = userAns !== null ? q.opts[userAns] : 'لم يجب';
+            reportHTML += '<div class="q-item">';
+            reportHTML += '<div class="q-num">س' + num + ':</div>';
+            reportHTML += '<div>' + q.q + '</div>';
+            reportHTML += '<div>📌 الصحيح: <span class="correct-ans">' + correctText + '</span></div>';
+            reportHTML += '<div>👤 إجابتك: <span class="' + (isCorrect ? 'correct-ans' : 'wrong-ans') + '">' + userText + '</span> ' + (isCorrect ? '✅' : '❌') + '</div>';
+            reportHTML += '</div>';
+        });
+
+        var modeLabel = essayMode === 'electronic' ? '💻 إلكتروني' : '📷 ورقي';
+        reportHTML += '<h4 style="color:#38bdf8;margin:20px 0 10px 0;">✍️ الأسئلة المقالية (' + essayQuestions.length + ' سؤال) — ' + modeLabel + '</h4>';
+
+        if (essayMode === 'electronic') {
+            essayQuestions.forEach(function(q, idx) {
+                var answer = essayElectronicAnswers[idx] || 'لم يجب';
+                reportHTML += '<div class="q-item">';
+                reportHTML += '<div class="q-num">س' + (idx + 1) + ':</div>';
+                reportHTML += '<div>' + q.q + '</div>';
+                reportHTML += '<div>👤 إجابتك: <span class="user-ans">' + answer + '</span></div>';
+                reportHTML += '</div>';
+            });
+        } else {
+            reportHTML += '<div class="q-item">';
+            reportHTML += '<div class="q-num">إجابتك الورقية:</div>';
+            reportHTML += '<div style="white-space:pre-wrap;color:var(--gold-color);padding:10px;background:rgba(0,0,0,0.3);border-radius:8px;margin-top:8px;">' + (essayText.trim() || 'لم يجب') + '</div>';
+            reportHTML += '</div>';
+        }
+
+        document.getElementById('report-details-container').innerHTML = reportHTML;
+        document.getElementById('cert-name').textContent = studentName || 'طالب أكاديمية كودجي';
+        document.getElementById('cert-score').textContent = '🌟 النتيجة: ' + overall + '%';
+        document.getElementById('result-container').style.display = 'block';
+
+        window._resultData = {
+            mcqCorrect: mcqCorrect, mcqAnswered: mcqAnswered, mcqTotal: mcqQuestions.length, mcqPercent: mcqPercent,
+            essayAnswered: essayAnswered, essayTotal: essayQuestions.length, essayPercent: essayPercent, overall: overall,
+            essayText: essayText, essayMode: essayMode
+        };
+    }
+
+    function copyReportToClipboard() {
+        var data = window._resultData || {};
+        var lines = [];
+        lines.push('مرحباً مهندس أندرو 👋');
+        lines.push('');
+        lines.push('الطالب/الطالبة: ' + (studentName || 'طالب أكاديمية كودجي'));
+        lines.push('الدرس: الثالث (الوحدة الثانية) - الاستجابة للحوادث وإدارة المخاطر');
+        lines.push('📊 النتيجة النهائية: ' + (data.overall || 0) + '%');
+        lines.push('');
+        lines.push('📝 الاختياري: ' + (data.mcqCorrect || 0) + '/' + (data.mcqTotal || 0) + ' (' + (data.mcqPercent || 0) + '%)');
+        lines.push('✍️ المقالي: ' + (data.essayAnswered || 0) + '/' + (data.essayTotal || 0) + ' (' + (data.essayPercent || 0) + '%)');
+        lines.push('');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        lines.push('📝 الاختياري:');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        mcqQuestions.forEach(function(q, idx) {
+            var num = idx + 1;
+            var userAns = mcqAnswers[idx];
+            var isCorrect = userAns === q.ans;
+            var correctText = q.opts[q.ans];
+            var userText = userAns !== null ? q.opts[userAns] : 'لم يجب';
+            lines.push('س' + num + ': ' + q.q);
+            lines.push('   صح: ' + correctText + ' | إجابتي: ' + userText + ' ' + (isCorrect ? '✅' : '❌'));
+        });
+        lines.push('');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        lines.push('✍️ المقالي (' + (data.essayMode === 'electronic' ? 'إلكتروني' : 'ورقي') + '):');
+        lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        if (data.essayMode === 'electronic') {
+            essayQuestions.forEach(function(q, idx) {
+                var answer = essayElectronicAnswers[idx] || 'لم يجب';
+                lines.push('س' + (idx + 1) + ': ' + q.q);
+                lines.push('   إجابتي: ' + answer);
+            });
+        } else {
+            lines.push(data.essayText || 'لم يجب');
+        }
+        lines.push('');
+        lines.push('تم التقييم بواسطة منصة كودجي 🤖');
+        lines.push('📅 ' + new Date().toLocaleDateString('ar-EG'));
+
+        var fullReport = lines.join('\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(fullReport).then(showCopySuccess).catch(function() { fallbackCopy(fullReport); });
+        } else {
+            fallbackCopy(fullReport);
+        }
+    }
+
+    function fallbackCopy(text) {
+        try {
+            var ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            var successful = document.execCommand('copy');
+            document.body.removeChild(ta);
+            if (successful) {
+                showCopySuccess();
+            } else {
+                prompt('انسخ التقرير من هنا:', text);
+            }
+        } catch (e) {
+            prompt('انسخ التقرير من هنا:', text);
+        }
+    }
+
+    function showCopySuccess() {
+        var el = document.getElementById('copy-success');
+        if (el) {
+            el.classList.add('copy-success-visible');
+            setTimeout(function() { el.classList.remove('copy-success-visible'); }, 4000);
+        }
+    }
+
+    window.addEventListener('scroll', function() {
+        var btn = document.getElementById('scroll-top');
+        if (btn) {
+            if (window.scrollY > 400) btn.style.display = 'block';
+            else btn.style.display = 'none';
+        }
+    });
+
+    window.addEventListener('DOMContentLoaded', function() {
+        switchMainTab('instructions');
+    });
+
+    window.switchMainTab = switchMainTab;
+    window.startMcq = startMcq;
+    window.selectMcqOption = selectMcqOption;
+    window.checkMcq = checkMcq;
+    window.navigateMcq = navigateMcq;
+    window.finishMcq = finishMcq;
+    window.selectEssayMode = selectEssayMode;
+    window.updateElectronicAnswer = updateElectronicAnswer;
+    window.savePaperExtractedText = savePaperExtractedText;
+    window.handlePaperFiles = handlePaperFiles;
+    window.removePaperImage = removePaperImage;
+    window.finishEssay = finishEssay;
+    window.copyReportToClipboard = copyReportToClipboard;
+</script>
+
+</body>
+</html>
